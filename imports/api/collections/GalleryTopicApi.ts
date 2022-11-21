@@ -6,10 +6,46 @@ export const GalleryTopicCollection = new Mongo.Collection("GalleryTopic");
 
 //db.getCollection('GalleryTopic').update({pick:'pick'},{$set:{pick:'unhandle'}},{multi:true})
 
-async function getOneUnhandled(){
-  const opt= {updatedAt:0,exclude:false,$or:[{pick:{$exists:false}},{pick:'unhandle'}]};
+
+
+async function getOneUnhandledPriori(n){
+  const baseOpt = {updatedAt:0,exclude:false,$or:[{pick:{$exists:false}},{pick:'unhandle'}]};
+  const opt = {
+    ...baseOpt,
+    priori:{$gt:n},
+  }
   const r=await GalleryTopicCollection.findOne(opt);
   return r;
+}
+
+async function getOneUnhandled(){
+
+  const r4 = await getOneUnhandledPriori(4)
+  if(r4){
+    return r4;
+  }
+
+  const r3 = await getOneUnhandledPriori(3)
+  if(r3){
+    return r3;
+  }
+
+  const r1 = await getOneUnhandledPriori(1)
+  if(r1){
+    return r1;
+  }
+
+  const r0 = await getOneUnhandledPriori(0)
+  if(r0){
+    return r0;
+  }
+
+  const r_1 = await getOneUnhandledPriori(-1)
+  if( r_1){
+    return  r_1;
+  }
+  return  null;
+
 }
 
 async function clearPick() {

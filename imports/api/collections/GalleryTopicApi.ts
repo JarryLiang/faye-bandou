@@ -12,6 +12,9 @@ async function getOneUnhandled(){
   return r;
 }
 
+async function clearPick() {
+  await GalleryTopicCollection.update({pick:"pick"},{$set:{pick:"handled"}},{multi:true});
+}
 async function markAsPick(_id:string){
   await GalleryTopicCollection.update({_id},{$set:{pick:"pick"}});
 }
@@ -132,5 +135,6 @@ export const GalleryTopicApi = {
   pickOneTopicToProcess,
   refreshTopicUpdate,
   summary,
-  getAllTopicsToMigrate
+  getAllTopicsToMigrate,
+  clearPick
 }

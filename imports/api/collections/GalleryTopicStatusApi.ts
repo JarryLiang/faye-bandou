@@ -1,3 +1,4 @@
+import {GalleryTopicCollection} from "/imports/api/collections/GalleryTopicApi";
 import {TopicReplyCollection} from "/imports/api/collections/TopicReplyApi";
 import {Mongo} from "meteor/mongo";
 
@@ -54,6 +55,10 @@ async function pickOneStatusToProcess(){
 
 }
 
+
+async function clearPick() {
+  await GalleryTopicStatusCollection.update({pick:"pick"},{$set:{pick:"handled"}},{multi:true});
+}
 
 
 async function aggregateByTopic(){
@@ -229,7 +234,8 @@ export const GalleryTopicStatusApi = {
   refreshStatusComments,
   summary,
   aggregateByTopic,
-  showAuthorId
+  showAuthorId,
+  clearPick
 }
 
 

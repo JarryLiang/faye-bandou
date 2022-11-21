@@ -119,6 +119,10 @@ Meteor.methods({
        topics
      }
   },
+  'mission.clearPick': async function(){
+    await GalleryTopicApi.clearPick();
+    await GalleryTopicStatusApi.clearPick();
+  },
   'mission.uploadTopics':async function(text){
     const jo=JSON.parse(text);
     const {topics} = jo;

@@ -109,7 +109,6 @@ async function getAllTopicsToMigrate() {
       priori
     } = doc;
     if(!exclude){
-      if(updatedAt ===0){
         result.push({
           _id,
           total,
@@ -118,7 +117,6 @@ async function getAllTopicsToMigrate() {
           updatedAt:0,
           priori
         });
-      }
     }
   }
   return result;

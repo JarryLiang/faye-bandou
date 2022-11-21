@@ -115,6 +115,7 @@ Meteor.methods({
     const topics = await GalleryTopicApi.getAllTopicsToMigrate();
      return {
        status:"OK",
+       count:topics.length,
        topics
      }
   },

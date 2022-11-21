@@ -3,6 +3,7 @@ import {DoubanApi} from "/imports/ui/pages/douban-api/DoubanApi";
 import GalleryTopicSelector from "/imports/ui/pages/gallery-topic/GalleryTopicSelector";
 import {CreateGroupMission} from "/imports/ui/pages/group-mission/CreateGroupMission";
 import Home from "/imports/ui/pages/home";
+import MigrateToRemote from "/imports/ui/pages/migrate-to-remote";
 import MissionStatus from "/imports/ui/pages/mission-status";
 import MissionManagement from "/imports/ui/pages/MissionManagement/MissionManagement";
 import TopicLogPivot from "/imports/ui/pages/pivot/TopicLogPivot";
@@ -19,6 +20,11 @@ export const routes = [
     path: "/mission_status",
     element: <MissionStatus />,
     title:"Mission Status"
+  },
+  {
+    path: "/mission_migrate",
+    element: <MigrateToRemote />,
+    title:"Download To Migrate"
   },
   {
     path: "/async_lock",

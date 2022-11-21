@@ -96,12 +96,41 @@ Meteor.methods({
       comments
     }
   },
+  'mission.showTarget':async function(){
+    const status = await GalleryTopicStatusApi.showAuthorId('205034565');
+    const comments = await GalleryCommentsApi.showAuthorId('205034565');
+
+    return {
+      status_count:status.length,
+      comments_count:comments.length,
+      status,
+      comments
+    }
+  },
+  'mission.statusAgg':async function() {
+    const result = await GalleryTopicStatusApi.aggregateByTopic();
+    return result;
+  },
+  'mission.downloadTopics':async function(){
+    const topics = await GalleryTopicApi.getAllTopicsToMigrate();
+     return {
+       status:"OK",
+       topics
+     }
+  },
+  'mission.uploadTopics':async function(text){
+    const jo=JSON.parse(text);
+    const {topics} = jo;
+    if(!topics){
+      return "Invalid Topic";
+    }
+    const c =await GalleryTopicApi.addTopics(topics);
+    return `Success ${c}`;
+
+  },
   'doExport'() {
     const ll = [
       '205034565',
-      // 'Ech000000000000',
-      // 'sheep330',
-      // 'unico626'
     ]
     let result = [];
     ll.forEach((l)=>{

@@ -1,3 +1,4 @@
+import {TopicReplyCollection} from "/imports/api/collections/TopicReplyApi";
 import {Mongo} from "meteor/mongo";
 
 export const GalleryTopicStatusCollection = new Mongo.Collection("GalleryTopicStatus");
@@ -33,6 +34,7 @@ async function pickOneStatusByOpt(opt){
   }
   return undefined;
 }
+
 async function pickOneStatusToProcess(){
   const after = new Date('2021-06-01').getTime()
   const sel ={
@@ -54,6 +56,22 @@ async function pickOneStatusToProcess(){
 
 
 
+async function aggregateByTopic(){
+  const pipeline = [
+    {
+      $group:{
+        _id:"$topicId",
+        topicName:{$max:"$topicName"},
+        count:{$sum:1},
+      }
+    },
+    {
+      $sort:{count:-1}
+    }
+  ];
+  const ll =await GalleryTopicStatusCollection.rawCollection().aggregate(pipeline).toArray();
+  return ll;
+}
 
 function findTopicMinMax(topicIds){
 
@@ -198,12 +216,20 @@ async function summary() {
   }
 
 }
+async function showAuthorId(authorId:string) {
+  // @ts-ignore
+  const ll =await GalleryTopicStatusCollection.find({authorId}).fetch();
+  return ll;
+}
+
 export const GalleryTopicStatusApi = {
   findTopicMinMax,
   updateFetchTopicItems,
   pickOneStatusToProcess,
   refreshStatusComments,
-  summary
+  summary,
+  aggregateByTopic,
+  showAuthorId
 }
 
 

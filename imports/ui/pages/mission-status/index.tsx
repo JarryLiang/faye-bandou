@@ -1,4 +1,5 @@
 
+import {AlignCenterRow} from "/imports/ui/common/AlignCenterRow";
 import {MenuBar} from "/imports/ui/menu";
 import {Button, PageHeader} from "antd";
 import React,{useState,useEffect} from 'react';
@@ -18,8 +19,8 @@ function MissionStatus(props:IProps) {
 
   const [data,setData ] = useState({});
   const [error,setError ] = useState();
-  function handlePressRefresh(){
-    Meteor.call("mission.status",(err,res)=>{
+  function remoteCall(methodName){
+    Meteor.call(methodName,(err,res)=>{
       if(err){
         setError(error);
       }else {
@@ -27,14 +28,27 @@ function MissionStatus(props:IProps) {
       }
     });
   }
+  function handlePressRefresh(){
+    remoteCall("mission.status");
+  }
+  function handlePressAgg(){
+    remoteCall("mission.statusAgg");
+  }
+
+  function handlePressTarget(){
+    remoteCall("mission.showTarget");
+  }
   return (
     <Holder>
       <MenuBar />
       <PageHeader>
         Mission Status
-
       </PageHeader>
-      <Button onClick={handlePressRefresh}>Refresh</Button>
+      <AlignCenterRow>
+        <Button onClick={handlePressRefresh}>Refresh statistic</Button>
+        <Button onClick={handlePressAgg}>Refresh Aggregate Status by Topic</Button>
+        <Button onClick={handlePressTarget}>仙女不講李</Button>
+      </AlignCenterRow>
       <hr/>
       <pre>
         {JSON.stringify(data,null,2)}

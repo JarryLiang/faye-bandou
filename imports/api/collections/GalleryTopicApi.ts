@@ -41,6 +41,16 @@ function updateRecord(record: any) {
   GalleryTopicCollection.update({_id:record._id},{$set:{priori,exclude}});
 }
 
+async function addTopics(topics:any){
+
+  let c = 0;
+  for(const item of topics){
+    const i=await addTopic(item);
+    c+=i;
+  }
+  return c;
+
+}
 async function addTopic(data: any) {
   const {_id} = data;
   const r= await GalleryTopicCollection.findOne({_id});
@@ -53,8 +63,7 @@ async function addTopic(data: any) {
     "updatedAt" : 0,
     "minTime" :  0,
     "timestamp" : 0,
-    "priori" : 4,
-    "exclude" : false,
+    "exclude" : data.exclude || false,
   });
   return 1;
 
@@ -85,15 +94,45 @@ async function summary() {
   }
 }
 
+async function getAllTopicsToMigrate() {
+  const cursor = GalleryTopicCollection.find({});
+
+  const before = new Date('2022-11-14').getTime();
+  const result = [];
+  for await (const doc of cursor){
+    const {
+      _id,
+      total,
+      name,
+      exclude,
+      updatedAt,
+      priori
+    } = doc;
+    if(!exclude){
+      if(updatedAt ===0){
+        result.push({
+          _id,
+          total,
+          name,
+          exclude,
+          updatedAt:0,
+          priori
+        });
+      }
+    }
+  }
+  return result;
+}
 export const GalleryTopicApi = {
   getUnhandled,
   updateRecord,
   addTopic,
+  addTopics,
   getOneUnhandled,
   markAsPick,
   markAsHandled,
   pickOneTopicToProcess,
   refreshTopicUpdate,
-  summary
-
+  summary,
+  getAllTopicsToMigrate
 }

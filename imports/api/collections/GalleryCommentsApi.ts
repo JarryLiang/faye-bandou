@@ -61,9 +61,15 @@ async function summary() {
     all
   }
 }
+
+async function showAuthorId(authorId: string) {
+  return await GalleryCommentsCollection.find({authorId}).fetch();
+
+}
 export const GalleryCommentsApi = {
   getTarget,
   getTargetRaw,
   upsertComments,
-  summary
+  summary,
+  showAuthorId
 }

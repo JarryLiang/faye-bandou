@@ -1,9 +1,9 @@
 import {StringHelper} from "/imports/helper/string-helpers";
 import {SizeType} from "antd/es/config-provider/SizeContext";
 import React from "react";
-import {Button, Input, InputNumber, Switch} from "antd";
+import {Button, Input, InputNumber, Switch, TextArea} from "antd";
 
-
+const { TextArea } = Input;
 interface INumberInputProps {
   value?:number;
   onUpdate:(value:number)=>void;
@@ -44,13 +44,18 @@ export function NumberInputHook(props:INumberInputProps) {
 
 export function StringInputHook(props:IStringInputProps){
   const {
-    value, onUpdate, defaultValue,
+    value, onUpdate, defaultValue,rows,
     disabled,  ...rest
   } = props;
 
   // @ts-ignore
   function handleChange(e){
     onUpdate(e.target.value);
+  }
+
+  if(rows){
+    return(<TextArea value={value} onChange={handleChange} rows={rows} {...rest} />);
+
   }
   return (
     <Input value={value} onChange={handleChange} {...rest} {...rest}  />

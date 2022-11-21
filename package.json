@@ -1,0 +1,51 @@
+{
+  "name": "faye-douban",
+  "private": true,
+  "scripts": {
+    "start": "cross-env TOOL_NODE_FLAGS=\"--max-old-space-size=4096\"   MONGO_URL=mongodb://localhost:27017/douban meteor run -p 3000",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.17.9",
+    "@types/meteor": "^1.4.70",
+    "@types/mocha": "^8.2.2",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.17.9",
+    "antd": "^4.23.5",
+    "async-lock": "^1.4.0",
+    "cross-env": "^7.0.3",
+    "csv-parse": "^5.3.1",
+    "express": "^4.18.2",
+    "meteor-node-stubs": "^1.2.1",
+    "moment": "^2.29.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pivottable": "^0.11.0",
+    "react-router-dom": "^6.4.2",
+    "styled-components": "^5.3.6",
+    "typescript": "^4.8.4",
+    "xlsx": "^0.18.5"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.tsx",
+      "server": "server/main.ts"
+    },
+    "testModule": "tests/main.js"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -42,7 +42,7 @@ app.post("/submitGalleryTopicWorks",async (req,res)=>{
 
 // @ts-ignore
 app.post('/galleryTopicWorks', (req, res) => {
-  console.log("galleryTopicWorks")
+
   LockCenter.getGalleryTopicWorks((err,result)=>{
     if(err){
       const data = {
@@ -56,7 +56,7 @@ app.post('/galleryTopicWorks', (req, res) => {
       }
 
       const str=JSON.stringify(data,null,2);
-      console.log(str);
+
       res.send(str);
     }
   });
@@ -100,7 +100,7 @@ app.post("/galleryStatusWorks",(req,res)=>{
         status:result
       }
       const str=JSON.stringify(data,null,2);
-      console.log(str);
+
       res.send(str);
     }
   });

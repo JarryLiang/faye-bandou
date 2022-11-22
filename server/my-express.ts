@@ -11,6 +11,7 @@ app.use(express.json({limit:'50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 const _ANOTHER_PORT = 4000; //use 4000 to ..
 
+import {MissionStatus} from "/server/mission_status";
 
 // @ts-ignore
 function saveContentToFile(content,fileName){
@@ -30,12 +31,14 @@ app.post("/submitGalleryTopicWorks",async (req,res)=>{
   await GalleryTopicApi.refreshTopicUpdate(data);
   await GalleryTopicStatusApi.updateFetchTopicItems(data);
 
+  MissionStatus.logSubmitTopic(req,data);
   //saveContentToFile(data,`d:\\temp\\_${topicId}.json`);
   //refresh..
   //save -->
   const result ={
     status:"success"
   }
+
   res.send(JSON.stringify(result));
 
 });
@@ -71,14 +74,15 @@ app.post("/submitStatusComments",async (req:any,res:any)=>{
 
 
   const {statusId} = data;
-  const fn= `d:\\temp\\status_${statusId}.json`;
-  saveContentToFile(data,fn);
+
+  // const fn= `d:\\temp\\status_${statusId}.json`;
+  // saveContentToFile(data,fn);
 
   await GalleryTopicStatusApi.refreshStatusComments(data);
   if(data.comments){
     await GalleryCommentsApi.upsertComments(data.comments);
   }
-
+  MissionStatus.logSubmitComments(req,data);
   const result ={
     status:"success"
   }

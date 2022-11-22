@@ -41,6 +41,14 @@ function MissionStatus(props:IProps) {
   function handlePressClearPick(){
     remoteCall("mission.clearPick");
   }
+  function handlePressStatusLog(){
+    remoteCall("mission.statusLog");
+  }
+
+  function handlePressCommentsLog(){
+    remoteCall("mission.commentLog");
+  }
+
   return (
     <Holder>
       <MenuBar />
@@ -49,6 +57,8 @@ function MissionStatus(props:IProps) {
       </PageHeader>
       <AlignCenterRow>
         <Button onClick={handlePressRefresh}>Refresh statistic</Button>
+        <Button onClick={handlePressStatusLog}>Status Log</Button>
+        <Button onClick={handlePressCommentsLog}>Comments Log</Button>
         <Button onClick={handlePressClearPick}>清除Pick</Button>
         <Button onClick={handlePressAgg}>Refresh Aggregate Status by Topic</Button>
         <Button onClick={handlePressTarget}>仙女不講李</Button>

@@ -2,6 +2,7 @@ import {GalleryCommentsApi} from "/imports/api/collections/GalleryCommentsApi";
 import {GalleryTopicApi} from "/imports/api/collections/GalleryTopicApi";
 import {GalleryTopicStatusApi} from "/imports/api/collections/GalleryTopicStatusApi";
 import {TopicLogApi} from "/imports/api/collections/TopicLogApi";
+import {MissionStatus} from "/server/mission_status";
 import {openServer2} from "/server/my-express";
 import {Meteor} from 'meteor/meteor';
 import {GroupApi} from "/imports/api/collections/GroupApi";
@@ -132,6 +133,12 @@ Meteor.methods({
     const c =await GalleryTopicApi.addTopics(topics);
     return `Success ${c}`;
 
+  },
+  'mission.statusLog':function(){
+    return MissionStatus.listStatusLog();
+  },
+  'mission.commentLog':function(){
+    return MissionStatus.listCommentsLog();
   },
   'doExport'() {
     const ll = [

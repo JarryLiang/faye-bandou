@@ -32,19 +32,53 @@ async function pickOneStatusByOpt(opt){
   return undefined;
 }
 
-async function pickOneStatusToProcess(param){
+
+async function pickOneStatusToProcessMin(param,min){
   const {count} = param;
 
   console.log("count:"+count);
   const after = new Date('2021-06-01').getTime()
 
   const sel ={
-    type:'status',
-    comments_count:{$gt:0},
-    updated:0,
-    timestamp:{$gt:after},
-    $or:[{pick:{$exists:false}},{pick:'unhandle'}]
+    "$and": [
+      {
+        "$or": [
+          {
+            "type": "status"
+          },
+          {
+            "type": {$exists:false}
+          }
+        ]
+      },
+      {
+        "comments_count": {
+          "$gt": min
+        }
+      },
+      {
+        "updated": 0
+      },
+      {
+        "timestamp": {
+          "$gt": after
+        }
+      },
+      {
+        "$or": [
+          {
+            "pick": {
+              "$exists": false
+            }
+          },
+          {
+            "pick": "unhandle"
+          }
+        ]
+      }
+    ]
   }
+
 
   const target = await GalleryTopicStatusCollection.find(sel,
     {limit:count}).fetch();
@@ -63,6 +97,15 @@ async function pickOneStatusToProcess(param){
 
   return target;
 
+
+}
+async function pickOneStatusToProcess(param){
+  let ll = await pickOneStatusToProcessMin(param,20);
+  if(ll.length>0){
+    return ll;
+  }
+  ll = await pickOneStatusToProcessMin(param,0);
+  return ll;
 }
 
 

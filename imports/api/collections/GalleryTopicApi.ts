@@ -9,7 +9,9 @@ export const GalleryTopicCollection = new Mongo.Collection("GalleryTopic");
 
 
 async function getOneUnhandledPriori(n){
-  const baseOpt = {updatedAt:0,exclude:false,$or:[{pick:{$exists:false}},{pick:'unhandle'}]};
+  const baseOpt = {updatedAt:0,
+                    $or:[{exclude:false},{exclude:{$exists:false}}],
+                    $or:[{pick:{$exists:false}},{pick:'unhandle'}]};
   const opt = {
     ...baseOpt,
     priori:{$gt:n},
@@ -20,20 +22,11 @@ async function getOneUnhandledPriori(n){
 
 async function getOneUnhandled(){
 
-  const r4 = await getOneUnhandledPriori(4)
-  if(r4){
-    return r4;
-  }
-
-  const r3 = await getOneUnhandledPriori(3)
-  if(r3){
-    return r3;
-  }
-
   const r1 = await getOneUnhandledPriori(1)
   if(r1){
     return r1;
   }
+
 
   const r0 = await getOneUnhandledPriori(0)
   if(r0){

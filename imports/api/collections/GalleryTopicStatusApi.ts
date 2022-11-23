@@ -8,6 +8,10 @@ export const GalleryTopicOtherCollection = new Mongo.Collection("GalleryTopicOth
 
 
 
+async function createTypeIndex(){
+  GalleryTopicStatusCollection.rawCollection.createIndex({type:1});
+}
+
 async function pickOneStatusByOptAndCount(opt,count){
 
   const sel = {
@@ -21,14 +25,6 @@ async function pickOneStatusByOptAndCount(opt,count){
 
 async function pickOneStatusByOpt(opt){
 
-  const s1 = await pickOneStatusByOptAndCount(opt,100);
-  if(s1){
-    return s1;
-  }
-  const s5 = await pickOneStatusByOptAndCount(opt,5);
-  if(s5){
-    return s5;
-  }
   const s0 = await pickOneStatusByOptAndCount(opt,0);
   if(s0){
     return s0;
@@ -36,8 +32,12 @@ async function pickOneStatusByOpt(opt){
   return undefined;
 }
 
-async function pickOneStatusToProcess(){
+async function pickOneStatusToProcess(param){
+  const {count} = param;
+
+  console.log("count:"+count);
   const after = new Date('2021-06-01').getTime()
+
   const sel ={
     type:'status',
     comments_count:{$gt:0},
@@ -45,12 +45,22 @@ async function pickOneStatusToProcess(){
     timestamp:{$gt:after},
     $or:[{pick:{$exists:false}},{pick:'unhandle'}]
   }
-  const target = await pickOneStatusByOpt(sel);
 
-  if(!target){
+  const target = await GalleryTopicStatusCollection.find(sel,
+    {limit:count}).fetch();
+
+  //
+
+  if(target.length==0){
     return null;
   }
-  await GalleryTopicStatusCollection.update({_id:target._id},{$set:{pick:'pick'}});
+
+  const ids = target.map((r)=>{return r._id});
+
+  await GalleryTopicStatusCollection.update({_id:{$in:ids}},{$set:{pick:'pick'}},{multi:true});
+
+  //await GalleryTopicStatusCollection.update({_id:target._id},{$set:{pick:'pick'}});
+
   return target;
 
 }
@@ -235,7 +245,8 @@ export const GalleryTopicStatusApi = {
   summary,
   aggregateByTopic,
   showAuthorId,
-  clearPick
+  clearPick,
+  createTypeIndex
 }
 
 

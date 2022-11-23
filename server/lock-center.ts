@@ -25,9 +25,9 @@ function getGalleryTopicWorks(callback:Callback){
 
 }
 
-function getStatusWorks(callback:Callback){
+function getStatusWorks(param,callback:Callback){
   lock.acquire('galleryStatus',function (done:Callback){
-    GalleryTopicStatusApi.pickOneStatusToProcess().then((r)=>{
+    GalleryTopicStatusApi.pickOneStatusToProcess(param).then((r)=>{
       done(null,r);
     }).catch((err)=>{
       done(err,null);

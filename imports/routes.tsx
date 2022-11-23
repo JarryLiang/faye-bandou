@@ -6,6 +6,7 @@ import Home from "/imports/ui/pages/home";
 import MigrateToRemote from "/imports/ui/pages/migrate-to-remote";
 import MissionStatus from "/imports/ui/pages/mission-status";
 import MissionManagement from "/imports/ui/pages/MissionManagement/MissionManagement";
+import MonitorAWSPage from "/imports/ui/pages/monitor-aws-page";
 import TopicLogPivot from "/imports/ui/pages/pivot/TopicLogPivot";
 import React from "react";
 
@@ -15,6 +16,11 @@ export const routes = [
     path: "/",
     element: <Home />,
     title:"Home"
+  },
+  {
+    path: "/monitor_aws",
+    element: <MonitorAWSPage />,
+    title:"AWS Monitor"
   },
   {
     path: "/mission_status",

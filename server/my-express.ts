@@ -1,6 +1,7 @@
 import {GalleryCommentsApi, GalleryCommentsCollection} from "/imports/api/collections/GalleryCommentsApi";
 import {GalleryTopicApi} from "/imports/api/collections/GalleryTopicApi";
 import {GalleryTopicStatusApi} from "/imports/api/collections/GalleryTopicStatusApi";
+import {getCurrentTimeStamp, logEnd} from "/server/helper";
 import {LockCenter} from "/server/lock-center";
 
 const fs = require('fs');
@@ -46,6 +47,7 @@ app.post("/submitGalleryTopicWorks",async (req,res)=>{
 // @ts-ignore
 app.post('/galleryTopicWorks', (req, res) => {
 
+  const t1 = getCurrentTimeStamp();
   LockCenter.getGalleryTopicWorks((err,result)=>{
     if(err){
       const data = {
@@ -61,8 +63,10 @@ app.post('/galleryTopicWorks', (req, res) => {
       const str=JSON.stringify(data,null,2);
 
       res.send(str);
+      logEnd(t1);
     }
   });
+
 });
 
 
@@ -89,9 +93,16 @@ app.post("/submitStatusComments",async (req:any,res:any)=>{
   res.send(JSON.stringify(result));
 });
 
-// @ts-ignore
+
 app.post("/galleryStatusWorks",(req,res)=>{
-  LockCenter.getStatusWorks((err,result)=>{
+  const {count} = req.query;
+  console.log(`count: ${count}`);
+  let cc =parseInt(count);
+  if(isNaN(cc)){
+    cc=1;
+  }
+
+  LockCenter.getStatusWorks({count:cc},(err,result)=>{
     if(err){
       const data = {
         error:err,

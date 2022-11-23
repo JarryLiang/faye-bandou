@@ -3,6 +3,7 @@ import {GalleryTopicApi} from "/imports/api/collections/GalleryTopicApi";
 import {GalleryTopicStatusApi} from "/imports/api/collections/GalleryTopicStatusApi";
 import {TopicLogApi} from "/imports/api/collections/TopicLogApi";
 import {MissionStatus} from "/server/mission_status";
+import {MonitorAws} from "/server/monitor-aws";
 import {openServer2} from "/server/my-express";
 import {Meteor} from 'meteor/meteor';
 import {GroupApi} from "/imports/api/collections/GroupApi";
@@ -140,6 +141,14 @@ Meteor.methods({
   'mission.commentLog':function(){
     return MissionStatus.listCommentsLog();
   },
+  "aws.uploadAddresses":function (addresses){
+    MonitorAws.uploadAddress(addresses);
+    return "ok";
+  },
+  "aws.status":async function (){
+    const r = await MonitorAws.fetchEC2Status();
+    return r;
+  },
   'doExport'() {
     const ll = [
       '205034565',
@@ -174,5 +183,5 @@ Meteor.startup(() => {
   // If the Links collection is empty, add some data.
   //doExport();
   openServer2();
-
+  GalleryTopicStatusApi.createTypeIndex();
 });

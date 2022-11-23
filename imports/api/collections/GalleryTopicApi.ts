@@ -10,7 +10,7 @@ export const GalleryTopicCollection = new Mongo.Collection("GalleryTopic");
 
 async function getOneUnhandledPriori(n){
   const baseOpt = {updatedAt:0,
-                    $or:[{exclude:false},{exclude:{$exists:false}}],
+                    $not:{exclude:true},
                     $or:[{pick:{$exists:false}},{pick:'unhandle'}]};
   const opt = {
     ...baseOpt,

@@ -80,9 +80,8 @@ Meteor.methods({
     });
     return GalleryTopicStatusApi.findTopicMinMax(Object.keys(topicIds));
   },
-  'updateGalleryTopic': function (record){
-    GalleryTopicApi.updateRecord(record);
-
+  'updateGalleryTopic': async function (record){
+    await GalleryTopicApi.updateRecord(record);
   },
   'GalleryTopicApi.addTopic':async function (data){
     return GalleryTopicApi.addTopic(data);

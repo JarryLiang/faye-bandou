@@ -68,9 +68,9 @@ async function getUnhandled(){
 
 
 }
-function updateRecord(record: any) {
+async function updateRecord(record: any) {
   const {priori,exclude} = record;
-  GalleryTopicCollection.update({_id:record._id},{$set:{priori,exclude}});
+  await GalleryTopicCollection.update({_id:record._id},{$set:{priori,exclude}});
 }
 
 async function addTopics(topics:any){

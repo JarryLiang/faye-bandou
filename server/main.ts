@@ -148,6 +148,9 @@ Meteor.methods({
     const r = await MonitorAws.fetchEC2Status();
     return r;
   },
+  "monitor.topicAgg":async function(){
+     return await GalleryTopicStatusApi.topicAgg();
+  },
   'doExport'() {
     const ll = [
       '205034565',

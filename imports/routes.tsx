@@ -1,3 +1,4 @@
+import AggregatesPage from "/imports/ui/pages/aggregates";
 import AsyncLockStatus from "/imports/ui/pages/async-lock-status/AsyncLockStatus";
 import {DoubanApi} from "/imports/ui/pages/douban-api/DoubanApi";
 import GalleryTopicSelector from "/imports/ui/pages/gallery-topic/GalleryTopicSelector";
@@ -61,5 +62,10 @@ export const routes = [
     path: "/pivot",
     element: <TopicLogPivot />,
     title:"Pivot"
+  },
+  {
+    path: "/aggregate",
+    element: <AggregatesPage />,
+    title:"AggregatesPage"
   }
 ]

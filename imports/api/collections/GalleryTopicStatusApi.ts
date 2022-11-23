@@ -280,6 +280,29 @@ async function showAuthorId(authorId:string) {
   return ll;
 }
 
+async function topicAgg() {
+  const pipeline =  [
+    {
+      $group:{
+        _id:"$topicId",
+        topicName:{ $max: "$topicName"},
+        count:{$sum:1}
+      }
+    },
+    {
+      $sort:{
+        count:-1
+      }
+    }
+  ];
+
+  const ll =await GalleryTopicStatusCollection.rawCollection().aggregate(pipeline).toArray();
+
+  return {
+    count:ll.length,
+    topics:ll
+  };
+}
 export const GalleryTopicStatusApi = {
   findTopicMinMax,
   updateFetchTopicItems,
@@ -289,7 +312,8 @@ export const GalleryTopicStatusApi = {
   aggregateByTopic,
   showAuthorId,
   clearPick,
-  createTypeIndex
+  createTypeIndex,
+  topicAgg
 }
 
 

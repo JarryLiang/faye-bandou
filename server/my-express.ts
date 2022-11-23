@@ -112,7 +112,7 @@ app.post("/galleryStatusWorks",(req,res)=>{
       res.send(str);
     }else {
       const data = {
-        status:result
+        statusList:result
       }
       const str=JSON.stringify(data,null,2);
 

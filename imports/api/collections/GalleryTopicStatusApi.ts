@@ -9,7 +9,7 @@ export const GalleryTopicOtherCollection = new Mongo.Collection("GalleryTopicOth
 
 
 async function createTypeIndex(){
-  GalleryTopicStatusCollection.rawCollection.createIndex({type:1});
+  GalleryTopicStatusCollection.rawCollection().createIndex({type:1});
 }
 
 async function pickOneStatusByOptAndCount(opt,count){

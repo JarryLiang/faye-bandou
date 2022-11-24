@@ -97,9 +97,10 @@ Meteor.methods({
       comments
     }
   },
-  'mission.showTarget':async function(){
-    const status = await GalleryTopicStatusApi.showAuthorId('205034565');
-    const comments = await GalleryCommentsApi.showAuthorId('205034565');
+  'mission.showTarget':async function(authorId){
+    const au = authorId ||'205034565';
+    const status = await GalleryTopicStatusApi.showAuthorId(au);
+    const comments = await GalleryCommentsApi.showAuthorId(au);
 
     return {
       status_count:status.length,
@@ -151,6 +152,33 @@ Meteor.methods({
   "monitor.topicAgg":async function(){
      return await GalleryTopicStatusApi.topicAgg();
   },
+  'result.getStatus': async function(authorId){
+    return await GalleryTopicStatusApi.getStatusOfAuthor(authorId);
+  },
+  'result.getComments':async function(authorId){
+     return await GalleryCommentsApi.getCommentsOfAuthor(authorId);
+  },
+  'result.status':async function(statusId){
+
+    const status = await  GalleryTopicStatusApi.getStatusById(statusId);
+    const comments = await  GalleryCommentsApi.getCommentsByStatusId(statusId);
+
+    return {
+      status,comments
+    }
+
+  },
+  'result.showAuthor':async function(authorId){
+    //const status = await GalleryTopicStatusApi.getStatusOfAuthor(authorId);
+    //const comments = await GalleryCommentsApi.getCommentsOfAuthor(authorId);
+    const status = await GalleryCommentsApi.showAuthorId(authorId);
+    const comments = await GalleryCommentsApi.getCommentsOfAuthor(authorId);
+
+    return {
+      status,
+      comments
+    }
+  },
   'doExport'() {
     const ll = [
       '205034565',
@@ -169,7 +197,7 @@ Meteor.methods({
 
 function doExport(){
 
-  const ll=GalleryCommentsApi.getTarget()
+  const ll=GalleryCommentsApi.getCommentsOfAuthor('205034565')
   const result=JSON.stringify(ll,null,2);
 
   var stream = fs.createWriteStream("d:\\comments.json");

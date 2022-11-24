@@ -1,5 +1,6 @@
 import AggregatesPage from "/imports/ui/pages/aggregates";
 import AsyncLockStatus from "/imports/ui/pages/async-lock-status/AsyncLockStatus";
+import AuthorPage from "/imports/ui/pages/author-page/author-page";
 import {DoubanApi} from "/imports/ui/pages/douban-api/DoubanApi";
 import GalleryTopicSelector from "/imports/ui/pages/gallery-topic/GalleryTopicSelector";
 import {CreateGroupMission} from "/imports/ui/pages/group-mission/CreateGroupMission";
@@ -9,6 +10,7 @@ import MissionStatus from "/imports/ui/pages/mission-status";
 import MissionManagement from "/imports/ui/pages/MissionManagement/MissionManagement";
 import MonitorAWSPage from "/imports/ui/pages/monitor-aws-page";
 import TopicLogPivot from "/imports/ui/pages/pivot/TopicLogPivot";
+import StatusPage from "/imports/ui/pages/status-page/StatusPage";
 import React from "react";
 
 
@@ -17,6 +19,16 @@ export const routes = [
     path: "/",
     element: <Home />,
     title:"Home"
+  },
+  {
+    path: "/by_author",
+    element: <AuthorPage />,
+    title: "作者頁"
+  },
+  {
+    path: "/by_status",
+    element: <StatusPage />,
+    title: "廣播頁"
   },
   {
     path: "/monitor_aws",

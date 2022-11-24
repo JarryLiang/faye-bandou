@@ -314,6 +314,18 @@ async function topicAgg() {
     topics:ll
   };
 }
+const _G_AUTHOR ='205034565';
+
+async function getStatusOfAuthor(authorId: string) {
+  const au = authorId || _G_AUTHOR;
+  const ll =await GalleryTopicStatusCollection.find({authorId:au}).fetch();
+  return ll;
+}
+
+async function getStatusById(statusId: any) {
+  return await GalleryTopicStatusCollection.findOne({_id:statusId});
+}
+
 export const GalleryTopicStatusApi = {
   findTopicMinMax,
   updateFetchTopicItems,
@@ -324,7 +336,9 @@ export const GalleryTopicStatusApi = {
   showAuthorId,
   clearPick,
   createTypeIndex,
-  topicAgg
+  topicAgg,
+  getStatusOfAuthor,
+  getStatusById
 }
 
 

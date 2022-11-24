@@ -1,5 +1,6 @@
 import {GalleryTopicCollection} from "/imports/api/collections/GalleryTopicApi";
 import {TopicReplyCollection} from "/imports/api/collections/TopicReplyApi";
+import {getCurrentTimeStamp, logEnd} from "/server/helper";
 import {Mongo} from "meteor/mongo";
 
 export const GalleryTopicStatusCollection = new Mongo.Collection("GalleryTopicStatus");
@@ -34,13 +35,27 @@ async function pickOneStatusByOpt(opt){
 
 
 async function pickOneStatusToProcessMin(param,min){
-  const {count} = param;
+  const {count,unpick} = param;
 
+  const t1 = getCurrentTimeStamp();
   console.log("count:"+count);
   const after = new Date('2021-06-01').getTime()
 
   const sel ={
     "$and": [
+      {
+        "updated": 0
+      },
+      {
+        "timestamp": {
+          "$gt": after
+        }
+      },
+      {
+        "comments_count": {
+          "$gt": min
+        }
+      },
       {
         "$or": [
           {
@@ -50,19 +65,6 @@ async function pickOneStatusToProcessMin(param,min){
             "type": {$exists:false}
           }
         ]
-      },
-      {
-        "comments_count": {
-          "$gt": min
-        }
-      },
-      {
-        "updated": 0
-      },
-      {
-        "timestamp": {
-          "$gt": after
-        }
       },
       {
         "$or": [
@@ -80,8 +82,11 @@ async function pickOneStatusToProcessMin(param,min){
   }
 
 
+
   const target = await GalleryTopicStatusCollection.find(sel,
     {limit:count}).fetch();
+  console.log(JSON.stringify(sel));
+  logEnd(t1);
 
   //
 
@@ -91,19 +96,25 @@ async function pickOneStatusToProcessMin(param,min){
 
   const ids = target.map((r)=>{return r._id});
 
-  await GalleryTopicStatusCollection.update({_id:{$in:ids}},{$set:{pick:'pick'}},{multi:true});
-
+  if(!unpick){
+    await GalleryTopicStatusCollection.update({_id:{$in:ids}},{$set:{pick:'pick'}},{multi:true});
+  }
   //await GalleryTopicStatusCollection.update({_id:target._id},{$set:{pick:'pick'}});
 
   return target;
 
-
 }
 async function pickOneStatusToProcess(param){
-  let ll = await pickOneStatusToProcessMin(param,20);
-  if(ll.length>0){
+  let ll = await pickOneStatusToProcessMin(param,10);
+  if(ll && ll.length>0){
     return ll;
   }
+
+  ll = await pickOneStatusToProcessMin(param,4);
+  if(ll && ll.length>0){
+    return ll;
+  }
+
   ll = await pickOneStatusToProcessMin(param,0);
   return ll;
 }

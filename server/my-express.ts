@@ -77,16 +77,18 @@ app.post("/submitStatusComments",async (req:any,res:any)=>{
   const data = req.body;
 
 
-  const {statusId} = data;
+   //const {statusId} = data;
+   //const fn= `d:\\temp\\status_${statusId}.json`;
+   //saveContentToFile(data,fn);
 
-  // const fn= `d:\\temp\\status_${statusId}.json`;
-  // saveContentToFile(data,fn);
 
   await GalleryTopicStatusApi.refreshStatusComments(data);
   if(data.comments){
     await GalleryCommentsApi.upsertComments(data.comments);
   }
   MissionStatus.logSubmitComments(req,data);
+
+
   const result ={
     status:"success"
   }
@@ -95,14 +97,14 @@ app.post("/submitStatusComments",async (req:any,res:any)=>{
 
 
 app.post("/galleryStatusWorks",(req,res)=>{
-  const {count} = req.query;
+  const {count,unpick} = req.query;
   console.log(`count: ${count}`);
   let cc =parseInt(count);
   if(isNaN(cc)){
     cc=1;
   }
 
-  LockCenter.getStatusWorks({count:cc},(err,result)=>{
+  LockCenter.getStatusWorks({count:cc,unpick},(err,result)=>{
     if(err){
       const data = {
         error:err,

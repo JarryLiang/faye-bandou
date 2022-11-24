@@ -15,4 +15,6 @@ sudo apt install -y mongodb-org
 
 mongod --version
 
+sudo systemctl status mongod
+
 sudo systemctl start mongod

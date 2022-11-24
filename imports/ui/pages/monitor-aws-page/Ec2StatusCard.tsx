@@ -46,6 +46,20 @@ export interface TItem {
 
 const Holder = styled.div`
   padding: 4px;
+  div {
+    &.w30 {
+      background-color: #FAA;
+      color: white;
+    }
+    &.w60 {
+      background-color: #F00;
+      color: white;
+    }
+    &.w100 {
+      background-color: #A00;
+      color: white;
+    }
+  }
   .copy {
     cursor: pointer;
     border: solid 1px #CCC;
@@ -90,7 +104,8 @@ function Ec2StatusCard(props:IProps) {
 
   const data = item.data || {};
 
-  const {browserStatus,error,running_mission,diffTime,complete} = data;
+  const {browserStatus,error,running_mission,diffTime,complete,browserAllocate,status_index_in_loop,count} = data;
+  const {errorPeak,errors}=data;
 
   function renderError(){
     if(error){
@@ -101,20 +116,49 @@ function Ec2StatusCard(props:IProps) {
     }
     return null;
   }
+  function renderErrors(){
+    if(errors.length>0){
+      const text=JSON.stringify(errors);
+      return (<div className={"errors"}>
+        {text}
+      </div>);
+    }
+    return null;
+  }
   function handlePressCopy(){
     StringHelper.copyTextToClipboard(address);
   }
 
   function renderBrowserStatus(){
-    const clz = browserStatus!=='douban loaded'?"browser error":"browser";
+    const clz = browserStatus!=='script injected'?"browser error":"browser";
     return (<div className={clz}>{browserStatus}</div>);
   }
 
   function renderDiffTime(){
     const d = Math.floor(diffTime/1000);
-    return(<div>{`waiting ${d} sec`}</div>);
-  }
+    let clz ="";
+    if(d>30) {
+      clz = "w30";
+    }
+    if(d>60) {
+      clz = "w60";
+    }
+    if(d>100) {
+      clz = "w100";
+    }
 
+    return(<div className={clz}>{`waiting ${d} sec`}</div>);
+  }
+  function renderStep(){
+    const text=`${browserAllocate}-${status_index_in_loop}`
+    return(
+      <div>
+      <div>Step: {text}</div>
+      <div>status: {count}</div>
+      <div>errorPeak: {errorPeak}</div>
+      </div>
+    );
+  }
   function renderComplete(){
 
     return <div>
@@ -131,7 +175,9 @@ function Ec2StatusCard(props:IProps) {
       </div>
       {renderBrowserStatus()}
       {renderError()}
+      {renderErrors()}
       {renderDiffTime()}
+      {renderStep()}
       {renderComplete()}
     </Holder>
   );

@@ -11,6 +11,7 @@ import {GroupMissionApi, ICreateMissionParam} from "/imports/api/collections/Gro
 import {GroupRangeMissionApi} from "/imports/api/collections/GroupRangeMissionApi";
 import {TopicReplyApi} from "/imports/api/collections/TopicReplyApi";
 
+import {saveStringToFile} from "/imports/helper/IO";
 
 const fs = require('fs');
 
@@ -121,6 +122,10 @@ Meteor.methods({
        topics
      }
   },
+  'mission.clearBlocked':async function(){
+    const r =await GalleryTopicStatusApi.clearBlocked();
+    return r;
+  },
   'mission.clearPick': async function(){
     await GalleryTopicApi.clearPick();
     await GalleryTopicStatusApi.clearPick();
@@ -195,12 +200,82 @@ Meteor.methods({
 });
 
 
-function doExport(){
+function exportToFile(content,fileName){
+  var stream = fs.createWriteStream(fileName);
+  const result = JSON.stringify(content,null,2);
+  stream.once('open', function(fd) {
+    stream.write(result);
+    stream.end();
+  });
 
-  const ll=GalleryCommentsApi.getCommentsOfAuthor('205034565')
+
+}
+
+
+const newSet = [
+  "395401729",
+  "381872881",
+  "391383671",
+  "389842008",
+  "381872461",
+  "358782593",
+  "358820408",
+  "372950983",
+  "394794972",
+  "349687392",
+  "367332596",
+  "389925559",
+  "397889874",
+  "395001138",
+  "398120551",
+  "395503831",
+  "389052503",
+  "394973641",
+  "362871204",
+  "379362717",
+  "359229474",
+  "359230273",
+  "381820173",
+  "381820124",
+  "359635322",
+  "388199432",
+  "389052524",
+  "373063927",
+  "358453859",
+  "349584061",
+  "348335645",
+  "357625851",
+  "348274665",
+  "354032162",
+  "387870157",
+  "395257449",
+  "366693331",
+  "349521685",
+  "384032000",
+  "358232682"
+];
+
+async function doExport(){
+
+  const mm = {};
+  newSet.forEach((r)=>{
+    mm[r]=true;
+  });
+
+  let  ll= await GalleryCommentsApi.getCommentsOfAuthor('205034565')
+
+  ll=ll.filter((item)=>{
+    if(mm[item._id]){
+      return false;
+    }
+    return true;
+  });
+
   const result=JSON.stringify(ll,null,2);
 
-  var stream = fs.createWriteStream("d:\\comments.json");
+  const fn =`d:\\comments_[${ll.length}].json`;
+
+  var stream = fs.createWriteStream(fn);
   stream.once('open', function(fd) {
     stream.write(result);
     stream.end();
@@ -209,9 +284,17 @@ function doExport(){
 
 
 }
+
+
+
 Meteor.startup(() => {
   // If the Links collection is empty, add some data.
-  //doExport();
+  // doExport().then(()=>{
+  //
+  // });
   openServer2();
-  GalleryTopicStatusApi.createTypeIndex();
+
+  //GalleryTopicStatusApi.createTypeIndex();
+  // miscCheck().then(()=>{});
+  // doCompare();
 });

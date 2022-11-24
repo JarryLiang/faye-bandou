@@ -18,16 +18,23 @@ async function getCommentsOfAuthor(authorId){
 
   let ll=await GalleryCommentsCollection.find({authorId:au}).fetch();
 
-  for await (const item of ll){
-    const {statusId} = item;
+  for await (const item of ll) {
+    const {statusId, statusAuthorId} = item;
     let statusText = item.statusText;
-    if(!statusText){
-     const status = await GalleryTopicStatusApi.getStatusById(statusId);
-
-     const  {text} = status;
-     console.log(text);
-     item.statusText = text;
-     await  GalleryCommentsCollection.update({_id:item._id},{$set:{statusText:text}});
+    if((!statusText) || (!statusAuthorId)) {
+      const status = await GalleryTopicStatusApi.getStatusById(statusId);
+      if (status) {
+        const {text} = status;
+        console.log(text);
+        item.statusText = text;
+        if(!item.rootAuthorId){
+          item.rootAuthorId = status.authorId;
+        }
+        if(!item.statusAuthorName){
+          item.rootAuthorName = status.authorName;
+        }
+        await GalleryCommentsCollection.update({_id: item._id}, {$set: {statusText: text}});
+      }
     }
   }
 
@@ -58,8 +65,7 @@ async function getCommentsOfAuthor(authorId){
       '回覆id':_id,
       "廣播樓主Id":rootAuthorId,
       "回覆者Id":authorId,
-
-
+      _id
     }
   });
 

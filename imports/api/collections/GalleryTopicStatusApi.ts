@@ -326,6 +326,26 @@ async function getStatusById(statusId: any) {
   return await GalleryTopicStatusCollection.findOne({_id:statusId});
 }
 
+async function clearBlocked(){
+  const sel ={
+    updated:{$gt:0},
+    comments_count:{$gt:1},
+    fetched_comments_count:0,
+    pick:'handled'
+  };
+  const mod ={
+    $set:{
+      updated:0,
+      pick:'unhandle'
+    }
+  };
+
+  const c = await GalleryTopicStatusCollection.update(
+    sel,mod,{multi:true});
+
+  return c;
+
+}
 export const GalleryTopicStatusApi = {
   findTopicMinMax,
   updateFetchTopicItems,
@@ -338,7 +358,8 @@ export const GalleryTopicStatusApi = {
   createTypeIndex,
   topicAgg,
   getStatusOfAuthor,
-  getStatusById
+  getStatusById,
+  clearBlocked
 }
 
 

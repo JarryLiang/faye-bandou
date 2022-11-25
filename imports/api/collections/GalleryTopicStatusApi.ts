@@ -39,7 +39,7 @@ async function pickOneStatusToProcessMin(param,min){
 
   const t1 = getCurrentTimeStamp();
   console.log("count:"+count);
-  const after = new Date('2021-06-01').getTime()
+  const after = new Date('2021-03-01').getTime()
 
   const sel ={
     "$and": [

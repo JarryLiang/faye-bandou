@@ -222,13 +222,28 @@ function GalleryTopicSelector(props: IProps) {
 
   }
 
+
   function handleExport() {
     const ll = [];
+
+    const excludeCids = {
+      "1027":true,
+      "1041":true,
+      "4":true,
+      "17":true,
+      "3":true,
+      "14":true
+    }
+
     records.forEach((r) => {
-      const {_id, name, priori, exclude, updatedAt} = r;
-      if (updatedAt != 0) {
-        return;
+      const {_id, name, priori, exclude, updatedAt,cid} = r;
+      if(cid){
+        if(excludeCids[cid]){
+          console.log("exluce");
+          return;
+        }
       }
+
       if (exclude) {
         return;
       }
@@ -250,13 +265,6 @@ function GalleryTopicSelector(props: IProps) {
       }
     });
     saveStringToFile(works, "works.json");
-
-    // {
-    //   "cc": 24220,
-    //   "topicId": "294793",
-    //   "fn": "Z_004894_294793",
-    //   "name": "最后的聊天记录"
-    // },
 
   }
 

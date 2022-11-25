@@ -105,7 +105,7 @@ function Ec2StatusCard(props:IProps) {
   const data = item.data || {};
 
   const {browserStatus,error,running_mission,diffTime,complete,browserAllocate,status_index_in_loop,count} = data;
-  const {errorPeak,errors}=data;
+  const {errorPeak,errors,zeroComments}=data;
 
   function renderError(){
     if(error){
@@ -167,6 +167,20 @@ function Ec2StatusCard(props:IProps) {
 
   }
 
+  function renderZeroComments() {
+    let clz ="";
+    if(zeroComments>2) {
+      clz = "w30";
+    }
+    if(zeroComments>5) {
+      clz = "w100";
+    }
+    return <div className={clz}>
+      Zero Comments:{zeroComments}
+    </div>
+
+  }
+
   return (
     <Holder>
       <div className={"mission-type"}>{running_mission}</div>
@@ -174,9 +188,11 @@ function Ec2StatusCard(props:IProps) {
       <span className={"copy"} onClick={handlePressCopy}>COPY</span>
       </div>
       {renderBrowserStatus()}
+      {renderZeroComments()}
+      {renderDiffTime()}
       {renderError()}
       {renderErrors()}
-      {renderDiffTime()}
+
       {renderStep()}
       {renderComplete()}
     </Holder>

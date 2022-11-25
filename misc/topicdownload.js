@@ -118,13 +118,58 @@ function downloadTopics(){
   return result;
 }
 
+function clearTopicLinks(){
+  try{
+    const ll=document.querySelectorAll(".topic-link");
+    for(const item of ll){
+      item.remove();
+    }
+  }catch (e){
+    console.error(e);
+  }
+}
+
+function getColumnId(){
+  const c =window.location.href.split("?")[1];
+  if(c){
+    const cid = c.split("=")[1];
+    return cid;
+  }
+}
+
+function tryToSaveTopics(count){
+  let  ll=downloadTopics();
+  const cid = getColumnId();
+  if(ll.length>count){
+    ll=ll.filter((r)=>{
+      const {docs,join,follow} = r;
+      const t = docs+join+follow;
+      return t>0;
+    });
+
+    ll=ll.map((l)=>{
+      return {
+        ...l,
+        cid,
+      }
+    });
+
+    const ts=new Date().getTime();
+    const prefix = `${ll.length}-${ts}_`
+    const fn= window.location.href.split("?")[1]+`${prefix}_topics.json`;
+    saveStringToFile(ll,fn);
+    clearTopicLinks();
+  }
+}
+
 let handle = setInterval(()=>{
   const b =tryClick();
   if(!b){
     clearInterval(handle)
-    const ll=downloadTopics();
-    const fn= window.location.href.split("?")[1]+"_topics.json";
-    saveStringToFile(ll,fn);
+    tryToSaveTopics(0);
+  }else {
+    tryToSaveTopics(64);
+
   }
 },3000);
 

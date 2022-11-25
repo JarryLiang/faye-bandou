@@ -26,9 +26,43 @@ function MigrateToRemote(props:IProps) {
   const [text,setText ] = useState("");
 
   function handlePressDownloadTopic(){
+    const excludeCids = {
+      "1027":true,
+      "1041":true,
+      "4":true,
+      "17":true,
+      "3":true,
+      "14":true
+    }
+
+
     Meteor.call("mission.downloadTopics",(err,res)=>{
       setData(res);
-      saveStringToFile(res,"topics.json");
+      debugger
+      const {topics} = res;
+      const ts=topics.filter((r)=>{
+        const {exclude,cid,priori} = r;
+        if(exclude){
+          return false;
+        }
+        if(cid){
+          if(excludeCids[cid]){
+            return false;
+          }
+        }
+        if(priori<0){
+          return false;
+        }
+        return true;
+      });
+
+      const result ={
+        ...res,
+        count:ts.length,
+        topics:ts
+      }
+
+      saveStringToFile(result,"topics.json");
     });
   }
   function handlePressUpload(){

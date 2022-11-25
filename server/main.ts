@@ -68,7 +68,6 @@ Meteor.methods({
     return rr;
   },
   'getGalleryTopics':async function(){
-
     const ll =await GalleryTopicApi.getUnhandled();
     return JSON.stringify(ll);
 

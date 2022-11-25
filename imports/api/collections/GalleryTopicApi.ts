@@ -68,7 +68,7 @@ async function pickOneTopicToProcess(){
 }
 
 async function getUnhandled(){
-  const ll:any[]=GalleryTopicCollection.find({updatedAt:0}).fetch();
+  const ll:any[]=GalleryTopicCollection.find({}).fetch();
 
   return ll;
 
@@ -143,6 +143,10 @@ async function getAllTopicsToMigrate() {
       total,
       name,
       exclude,
+      cid,
+      docs,
+      join,
+      follow,
       updatedAt,
       priori
     } = doc;
@@ -153,7 +157,11 @@ async function getAllTopicsToMigrate() {
           name,
           exclude,
           updatedAt:0,
-          priori
+          cid,
+          priori,
+          docs,
+          join,
+          follow,
         });
     }
   }

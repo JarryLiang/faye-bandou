@@ -115,6 +115,11 @@ async function pickOneStatusToProcess(param){
     return ll2;
   }
 
+  let ll1 = await pickOneStatusToProcessMin(param,1);
+  if(ll1 && ll1.length>0){
+    return ll1;
+  }
+
   let ll0 = await pickOneStatusToProcessMin(param,0);
   return ll0;
 }

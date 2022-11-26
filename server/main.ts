@@ -172,10 +172,14 @@ Meteor.methods({
     }
 
   },
+  'result.showHandled':async function(){
+    const r = await GalleryTopicStatusApi.getStatusJobRemain();
+    return r;
+  },
   'result.showAuthor':async function(authorId){
-    //const status = await GalleryTopicStatusApi.getStatusOfAuthor(authorId);
+    const status = await GalleryTopicStatusApi.getStatusOfAuthor(authorId);
     //const comments = await GalleryCommentsApi.getCommentsOfAuthor(authorId);
-    const status = await GalleryCommentsApi.showAuthorId(authorId);
+    //const status = await GalleryCommentsApi.showAuthorId(authorId);
     const comments = await GalleryCommentsApi.getCommentsOfAuthor(authorId);
 
     return {
@@ -183,6 +187,7 @@ Meteor.methods({
       comments
     }
   },
+
   'doExport'() {
     const ll = [
       '205034565',

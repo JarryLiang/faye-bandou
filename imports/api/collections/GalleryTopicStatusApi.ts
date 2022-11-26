@@ -104,6 +104,124 @@ async function pickOneStatusToProcessMin(param,min){
   return target;
 
 }
+
+
+async function getStatusJobRemain(){
+  const steps = [
+    -1,
+    0,
+    2,
+    10,
+    50
+  ];
+
+  const ll = [];
+  for await (const m of steps){
+    const r = await countStatusToProcessMin(m);
+    ll.push({
+      min:m,
+      state:r,
+    })
+  }
+  //-->
+  const result = [];
+  ll.forEach((item,index)=>{
+    const next = ll[index+1];
+    if(!next){
+      result.push(item);
+      return;
+    }
+    const realState = {
+      all:item.state.all-next.state.all,
+      updated:item.state.updated - next.state.updated
+    }
+    result.push({
+      min:item.min,
+      state:realState
+    });
+  });
+  return result;
+}
+
+async function countStatusToProcessMin(min:number){
+
+
+  const after = new Date('2021-03-01').getTime()
+  const selAll = {
+    "$and": [
+      {
+        "timestamp": {
+          "$gt": after
+        }
+      },
+      {
+        "comments_count": {
+          "$gt": min
+        }
+      },
+      {
+        "$or": [
+          {
+            "type": "status"
+          },
+          {
+            "type": {$exists:false}
+          }
+        ]
+      },
+    ]
+  }
+  //---
+  const sel_toDo = {
+    "$and": [
+      {
+        "updated": 0
+      },
+      {
+        "timestamp": {
+          "$gt": after
+        }
+      },
+      {
+        "comments_count": {
+          "$gt": min
+        }
+      },
+      {
+        "$or": [
+          {
+            "type": "status"
+          },
+          {
+            "type": {$exists:false}
+          }
+        ]
+      },
+      {
+        "$or": [
+          {
+            "pick": {
+              "$exists": false
+            }
+          },
+          {
+            "pick": "unhandle"
+          }
+        ]
+      }
+    ]
+  }
+
+  const all = await GalleryTopicStatusCollection.find(selAll).count();
+  const updated = await GalleryTopicStatusCollection.find(sel_toDo).count();
+
+  return {
+    all,
+    updated
+  }
+
+}
+
 async function pickOneStatusToProcess(param){
   // let ll = await pickOneStatusToProcessMin(param,10);
   // if(ll && ll.length>0){
@@ -364,7 +482,8 @@ export const GalleryTopicStatusApi = {
   topicAgg,
   getStatusOfAuthor,
   getStatusById,
-  clearBlocked
+  clearBlocked,
+  getStatusJobRemain
 }
 
 

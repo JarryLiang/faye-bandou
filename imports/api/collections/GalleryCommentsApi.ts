@@ -46,7 +46,7 @@ async function getCommentsOfAuthor(authorId){
   ll =ll.map((r)=>{
 
     const {_id,topicId,topicName,statusId,statusText,statusAuthorId,statusAuthorName,create_time,authorId,authorName,text} = r;
-    const {rootAuthorId,rootAuthorName} = r;
+    const {rootAuthorId,rootAuthorName,timestamp} = r;
 
     const url = `https://www.douban.com/people/${rootAuthorId}/status/${statusId}/`;
     let st = statusText || "";
@@ -56,17 +56,22 @@ async function getCommentsOfAuthor(authorId){
     return {
       "日期":create_time,
       "話題":topicName,
-      "廣播樓主":rootAuthorName,
-      "廣播":st,
       "回覆者":authorName,
       "回覆內容":text,
+      "廣播樓主":rootAuthorName,
+      "廣播":st,
       "廣播url":url,
       '話題id':topicId,
       '回覆id':_id,
       "廣播樓主Id":rootAuthorId,
       "回覆者Id":authorId,
+      timestamp,
       _id
     }
+  });
+
+  ll.sort((a,b)=>{
+    return b.timestamp-a.timestamp;
   });
 
   return ll;

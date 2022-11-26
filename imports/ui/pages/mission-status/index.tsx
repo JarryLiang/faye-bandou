@@ -45,6 +45,10 @@ function MissionStatus(props:IProps) {
     remoteCall("mission.clearBlocked");
   }
 
+  function handlePressShowUnhandled() {
+    remoteCall("result.showHandled");
+  }
+
   function handlePressStatusLog(){
     remoteCall("mission.statusLog");
   }
@@ -65,6 +69,7 @@ function MissionStatus(props:IProps) {
         <Button onClick={handlePressCommentsLog}>Comments Log</Button>
         <Button onClick={handlePressClearPick}>清除Pick</Button>
         <Button onClick={handlePressClearBlocked}>清除 Blocked</Button>
+        <Button onClick={handlePressShowUnhandled}>Show unhandled</Button>
         <Button onClick={handlePressAgg}>Refresh Aggregate Status by Topic</Button>
         <Button onClick={handlePressTarget}>仙女不講李</Button>
       </AlignCenterRow>

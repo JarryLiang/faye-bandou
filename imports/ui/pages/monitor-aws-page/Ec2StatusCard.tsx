@@ -117,7 +117,7 @@ function Ec2StatusCard(props:IProps) {
     return null;
   }
   function renderErrors(){
-    if(errors.length>0){
+    if(errors && errors.length>0){
       const text=JSON.stringify(errors);
       return (<div className={"errors"}>
         {text}
@@ -154,8 +154,7 @@ function Ec2StatusCard(props:IProps) {
     return(
       <div>
       <div>Step: {text}</div>
-      <div>status: {count}</div>
-      <div>errorPeak: {errorPeak}</div>
+      <div>count: {count}</div>
       </div>
     );
   }
@@ -188,13 +187,14 @@ function Ec2StatusCard(props:IProps) {
       <span className={"copy"} onClick={handlePressCopy}>COPY</span>
       </div>
       {renderBrowserStatus()}
+      <div>errorPeak: {errorPeak}</div>
       {renderZeroComments()}
       {renderDiffTime()}
       {renderError()}
-      {renderErrors()}
-
       {renderStep()}
       {renderComplete()}
+      <hr/>
+      {renderErrors()}
     </Holder>
   );
 }

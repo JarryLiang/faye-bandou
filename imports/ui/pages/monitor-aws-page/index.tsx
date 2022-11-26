@@ -68,13 +68,19 @@ function MonitorAWSPage(props:IProps) {
       if(err){
         showErr(err);
       }else {
-        setStatus(res);
+        const ll = res.sort((a,b)=>{
+          const ea = a.errorPeak || 0;
+          const eb = b.errorPeak || 0;
+          return eb -ea;
+        });
+        setStatus(ll);
       }
     });
   }
 
 
   function renderAllStatusGroup(ss){
+
     const views=ss.map((item)=>{
       const {address,data} = item;
       return(<Ec2StatusCard key={address} item={item}/>);

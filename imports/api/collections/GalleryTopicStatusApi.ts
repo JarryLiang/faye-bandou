@@ -105,18 +105,18 @@ async function pickOneStatusToProcessMin(param,min){
 
 }
 async function pickOneStatusToProcess(param){
-  let ll = await pickOneStatusToProcessMin(param,10);
-  if(ll && ll.length>0){
-    return ll;
+  // let ll = await pickOneStatusToProcessMin(param,10);
+  // if(ll && ll.length>0){
+  //   return ll;
+  // }
+
+  let ll2 = await pickOneStatusToProcessMin(param,2);
+  if(ll2 && ll2.length>0){
+    return ll2;
   }
 
-  ll = await pickOneStatusToProcessMin(param,4);
-  if(ll && ll.length>0){
-    return ll;
-  }
-
-  ll = await pickOneStatusToProcessMin(param,0);
-  return ll;
+  let ll0 = await pickOneStatusToProcessMin(param,0);
+  return ll0;
 }
 
 

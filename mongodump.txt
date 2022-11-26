@@ -2,7 +2,19 @@
 1.
  dump
 
+
+mongodump --uri="mongodb://127.0.0.1:27017" --db=douban -o douban
+
+
 2.tar
+tar -cvzf xxx.tar  foldername
+tar -cvzf com.tgz  douban
 
 
 3.scp
+
+
+restore
+
+mongorestore mongodb://127.0.0.1:27017/douban2   douban
+

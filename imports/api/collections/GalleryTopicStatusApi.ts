@@ -133,7 +133,7 @@ async function getStatusJobRemain(){
     }
     const realState = {
       all:item.state.all-next.state.all,
-      updated:item.state.updated - next.state.updated
+      todo:item.state.unhandle - next.state.unhandle
     }
     result.push({
       min:item.min,
@@ -213,11 +213,11 @@ async function countStatusToProcessMin(min:number){
   }
 
   const all = await GalleryTopicStatusCollection.find(selAll).count();
-  const updated = await GalleryTopicStatusCollection.find(sel_toDo).count();
+  const unhandle = await GalleryTopicStatusCollection.find(sel_toDo).count();
 
   return {
     all,
-    updated
+    unhandle
   }
 
 }

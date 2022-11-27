@@ -27,12 +27,12 @@ function MigrateToRemote(props:IProps) {
 
   function handlePressDownloadTopic(){
     const excludeCids = {
-      "1027":true,
-      "1041":true,
-      "4":true,
-      "17":true,
-      "3":true,
-      "14":true
+       "1029":true, //2
+       "1041":true, //game
+      //"4":true, //camera
+      //"17":true, //song
+      //"3":true, //tech
+      //"14":true //plant
     }
 
 
@@ -45,14 +45,17 @@ function MigrateToRemote(props:IProps) {
         if(exclude){
           return false;
         }
-        if(cid){
-          if(excludeCids[cid]){
-            return false;
-          }
-        }
         if(priori<0){
           return false;
         }
+        if(cid){
+          if(excludeCids[cid]){
+            return true;
+          }
+
+        }
+        return false;
+
         return true;
       });
 

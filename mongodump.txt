@@ -18,3 +18,10 @@ restore
 
 mongorestore mongodb://127.0.0.1:27017/douban2   douban
 
+
+
+mongodump --uri="mongodb://127.0.0.1:27017" --db=douban
+
+tar -cvzf backup_douban.tar.gz  douban
+
+scp -i "micro.pem" ubuntu@ec2-3-1-209-170.ap-southeast-1.compute.amazonaws.com:/home/ubuntu/backup_douban.tar.gz  d:\

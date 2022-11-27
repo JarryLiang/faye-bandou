@@ -223,14 +223,14 @@ async function countStatusToProcessMin(min:number){
 }
 
 async function pickOneStatusToProcess(param){
-  // let ll = await pickOneStatusToProcessMin(param,10);
-  // if(ll && ll.length>0){
-  //   return ll;
-  // }
+  let ll_10 = await pickOneStatusToProcessMin(param,10);
+  if(ll_10 && ll_10.length>0){
+    return ll_10;
+  }
 
-  let ll2 = await pickOneStatusToProcessMin(param,2);
-  if(ll2 && ll2.length>0){
-    return ll2;
+  let ll5 = await pickOneStatusToProcessMin(param,5);
+  if(ll5 && ll5.length>0){
+    return ll5;
   }
 
   let ll1 = await pickOneStatusToProcessMin(param,1);

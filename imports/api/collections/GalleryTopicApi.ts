@@ -9,6 +9,11 @@ export const GalleryTopicCollection = new Mongo.Collection("GalleryTopic");
 
 
 
+async function getPickedTopics() {
+  const ll= await GalleryTopicCollection.find({pick: PickState.pick}).fetch();
+  return ll;
+}
+
 async function resetAllTopicHandled() {
 
   GalleryTopicCollection.update({},{$set:{
@@ -180,6 +185,7 @@ async function getAllTopicsToMigrate() {
   }
   return result;
 }
+
 export const GalleryTopicApi = {
   getUnhandled,
   updateRecord,
@@ -193,5 +199,6 @@ export const GalleryTopicApi = {
   summary,
   getAllTopicsToMigrate,
   clearPick,
-  resetAllTopicHandled
+  resetAllTopicHandled,
+  getPickedTopics
 }

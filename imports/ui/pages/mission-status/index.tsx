@@ -28,6 +28,9 @@ function MissionStatus(props:IProps) {
       }
     });
   }
+  function handlePressGetPicked(){
+    remoteCall("mission.pickedTopics");
+  }
   function handlePressRefresh(){
     remoteCall("mission.status");
   }
@@ -65,10 +68,12 @@ function MissionStatus(props:IProps) {
       </PageHeader>
       <AlignCenterRow>
         <Button onClick={handlePressRefresh}>Refresh statistic</Button>
+        <Button onClick={handlePressGetPicked}>Picked</Button>
         <Button onClick={handlePressStatusLog}>Status Log</Button>
         <Button onClick={handlePressCommentsLog}>Comments Log</Button>
         <Button onClick={handlePressClearPick}>清除Pick</Button>
         <Button onClick={handlePressClearBlocked}>清除 Blocked</Button>
+
         <Button onClick={handlePressShowUnhandled}>Show unhandled</Button>
         <Button onClick={handlePressAgg}>Refresh Aggregate Status by Topic</Button>
         <Button onClick={handlePressTarget}>仙女不講李</Button>

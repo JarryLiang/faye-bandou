@@ -84,7 +84,10 @@ Meteor.methods({
     await GalleryTopicApi.updateRecord(record);
   },
   'GalleryTopicApi.addTopic':async function (data){
-    return GalleryTopicApi.addTopic(data);
+    return await GalleryTopicApi.addTopic(data);
+  },
+  'mission.pickedTopics':async function(){
+    return await GalleryTopicApi.getPickedTopics();
   },
   'mission.status':async function(){
     const topic =await GalleryTopicApi.summary();

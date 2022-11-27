@@ -129,10 +129,12 @@ async function refreshTopicUpdate(data: any) {
   const {id,timeStr,minTime,total,updatedAt,msg} = data;
 
   const toUpdate = {
-    timeStr,minTime,total,updatedAt,msg,
+    timeStr,minTime,total,msg,
+    updatedAt: new Date().getTime(),
     pick:PickState.handled
   }
-  await GalleryTopicCollection.update({_id:id},{$set:toUpdate});
+  const c =await GalleryTopicCollection.update({_id:id},{$set:toUpdate});
+  console.log(`${id} - ${c}`);
 }
 
 async function summary() {

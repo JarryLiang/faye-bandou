@@ -1,3 +1,4 @@
+import {PickState} from "/imports/api/collections/enums";
 import {Mongo} from "meteor/mongo";
 
 
@@ -8,13 +9,20 @@ export const GalleryTopicCollection = new Mongo.Collection("GalleryTopic");
 
 
 
+async function resetAllTopicHandled() {
+
+  GalleryTopicCollection.update({},{$set:{
+      pick:PickState.unhandle,
+      updatedAt:0,
+    }},{multi:true});
+}
+
 async function getOneUnhandledPriori(n){
   const baseOpt = {
                     $and:[
                       {updatedAt:0},
                       {$or:[{exclude:false},{exclude:{$exists:false}}]},
-                      {$or:[{pick:{$exists:false}},{pick:'unhandle'}]},
-                      {priori:{$gt:n}}
+                      {$or:[{pick:{$exists:false}},{pick:PickState.unhandle}]}
                     ]
                   };
   const r=await GalleryTopicCollection.findOne(baseOpt);
@@ -23,40 +31,43 @@ async function getOneUnhandledPriori(n){
 
 async function getOneUnhandled(){
 
+  //don't care priori.
   const r2 = await getOneUnhandledPriori(2)
   if(r2){
     return r2;
   }
-
-  const r1 = await getOneUnhandledPriori(1)
-  if(r1){
-    return r1;
-  }
-
-
-  const r0 = await getOneUnhandledPriori(0)
-  if(r0){
-    return r0;
-  }
-
-  const r_1 = await getOneUnhandledPriori(-1)
-  if( r_1){
-    return  r_1;
-  }
+  //
+  // const r1 = await getOneUnhandledPriori(1)
+  // if(r1){
+  //   return r1;
+  // }
+  //
+  //
+  // const r0 = await getOneUnhandledPriori(0)
+  // if(r0){
+  //   return r0;
+  // }
+  //
+  // const r_1 = await getOneUnhandledPriori(-1)
+  // if( r_1){
+  //   return  r_1;
+  // }
   return  null;
 
 }
 
 async function clearPick() {
-  await GalleryTopicCollection.update({pick:"pick"},{$set:{pick:"unhandle"}},{multi:true});
-  await GalleryTopicCollection.update({pick:'handled',updatedAt:0},{$set:{pick:"unhandle"}},{multi:true});
+  await GalleryTopicCollection.update({pick:PickState.pick},{$set:{pick:PickState.unhandle}},{multi:true});
+  await GalleryTopicCollection.update({pick:PickState.handled,updatedAt:0},{$set:{pick:PickState.unhandle}},{multi:true});
+
+  await GalleryTopicCollection.update({exclude:true},{$set:{exclude:false}},{multi:true});
 
 }
 async function markAsPick(_id:string){
-  await GalleryTopicCollection.update({_id},{$set:{pick:"pick"}});
+  await GalleryTopicCollection.update({_id},{$set:{pick:PickState.pick}});
 }
 async function markAsHandled(_id:string){
-  await GalleryTopicCollection.update({_id:_id},{$set:{pick:"handled"}});
+  await GalleryTopicCollection.update({_id:_id},{$set:{pick:PickState.handled}});
 }
 
 async function pickOneTopicToProcess(){
@@ -114,7 +125,7 @@ async function refreshTopicUpdate(data: any) {
 
   const toUpdate = {
     timeStr,minTime,total,updatedAt,msg,
-    pick:"handled"
+    pick:PickState.handled
   }
   await GalleryTopicCollection.update({_id:id},{$set:toUpdate});
 }
@@ -122,9 +133,9 @@ async function refreshTopicUpdate(data: any) {
 async function summary() {
 
   const all = await GalleryTopicCollection.find({}).count();
-  const pick =await GalleryTopicCollection.find({pick:'pick'}).count();
-  const unhandle =await GalleryTopicCollection.find({$or:[{pick:{$exists:false}},{pick:'unhandle'}}).count();
-  const handled =await GalleryTopicCollection.find({pick:'handled'}).count();
+  const pick =await GalleryTopicCollection.find({pick:PickState.pick}).count();
+  const unhandle =await GalleryTopicCollection.find({$or:[{pick:{$exists:false}},{pick:PickState.unhandle}]}).count();
+  const handled =await GalleryTopicCollection.find({pick:PickState.handled}).count();
 
   return {
     all,
@@ -181,5 +192,6 @@ export const GalleryTopicApi = {
   refreshTopicUpdate,
   summary,
   getAllTopicsToMigrate,
-  clearPick
+  clearPick,
+  resetAllTopicHandled
 }

@@ -7,6 +7,7 @@ export const GalleryTopicStatusCollection = new Mongo.Collection("GalleryTopicSt
 
 export const GalleryTopicOtherCollection = new Mongo.Collection("GalleryTopicOther");
 
+import {PickState} from "/imports/api/collections/enums";
 
 
 async function createTypeIndex(){
@@ -74,7 +75,7 @@ async function pickOneStatusToProcessMin(param,min){
             }
           },
           {
-            "pick": "unhandle"
+            "pick": PickState.unhandle
           }
         ]
       }
@@ -97,7 +98,7 @@ async function pickOneStatusToProcessMin(param,min){
   const ids = target.map((r)=>{return r._id});
 
   if(!unpick){
-    await GalleryTopicStatusCollection.update({_id:{$in:ids}},{$set:{pick:'pick'}},{multi:true});
+    await GalleryTopicStatusCollection.update({_id:{$in:ids}},{$set:{pick:PickState.pick}},{multi:true});
   }
   //await GalleryTopicStatusCollection.update({_id:target._id},{$set:{pick:'pick'}});
 
@@ -205,7 +206,7 @@ async function countStatusToProcessMin(min:number){
             }
           },
           {
-            "pick": "unhandle"
+            "pick": PickState.unhandle
           }
         ]
       }
@@ -244,9 +245,9 @@ async function pickOneStatusToProcess(param){
 
 
 async function clearPick() {
-  await GalleryTopicStatusCollection.update({pick:"pick"},{$set:{pick:"unhandle"}},{multi:true});
+  await GalleryTopicStatusCollection.update({pick:PickState.pick},{$set:{pick:PickState.unhandle}},{multi:true});
 
-  await GalleryTopicStatusCollection.update({pick:"handled",updated:0},{$set:{pick:"unhandle"}},{multi:true});
+  await GalleryTopicStatusCollection.update({pick:PickState.handled,updated:0},{$set:{pick:PickState.unhandle}},{multi:true});
 
 }
 
@@ -389,7 +390,7 @@ async function refreshStatusComments(data: any) {
     comments_updated= new Date().getTime();
   }
   const toUpdate = {
-    pick:'handled',
+    pick:PickState.handled,
     limited,
     msg,
     updated,
@@ -457,12 +458,12 @@ async function clearBlocked(){
     updated:{$gt:0},
     comments_count:{$gt:1},
     fetched_comments_count:0,
-    pick:'handled'
+    pick:PickState.handled
   };
   const mod ={
     $set:{
       updated:0,
-      pick:'unhandle'
+      pick:PickState.unhandle
     }
   };
 

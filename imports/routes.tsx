@@ -1,6 +1,7 @@
 import AggregatesPage from "/imports/ui/pages/aggregates";
 import AsyncLockStatus from "/imports/ui/pages/async-lock-status/AsyncLockStatus";
 import AuthorPage from "/imports/ui/pages/author-page/author-page";
+import DanerousOperations from "/imports/ui/pages/daner-operations/DangerousOperations";
 import {DoubanApi} from "/imports/ui/pages/douban-api/DoubanApi";
 import GalleryTopicSelector from "/imports/ui/pages/gallery-topic/GalleryTopicSelector";
 import {CreateGroupMission} from "/imports/ui/pages/group-mission/CreateGroupMission";
@@ -79,5 +80,11 @@ export const routes = [
     path: "/aggregate",
     element: <AggregatesPage />,
     title:"AggregatesPage"
+  },
+  {
+    path: "/danger",
+    element: <DanerousOperations />,
+    title:"Danerous Operations"
+
   }
 ]

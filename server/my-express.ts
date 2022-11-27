@@ -26,10 +26,14 @@ function saveContentToFile(content,fileName){
 }
 
 // @ts-ignore
+app.post("/submitCloseTopicWorks",async (req,res)=>{
+  const data = req.body;
+  await GalleryTopicApi.refreshTopicUpdate(data);
+});
+
 app.post("/submitGalleryTopicWorks",async (req,res)=>{
   const data = req.body;
 
-  await GalleryTopicApi.refreshTopicUpdate(data);
   await GalleryTopicStatusApi.updateFetchTopicItems(data);
 
   MissionStatus.logSubmitTopic(req,data);

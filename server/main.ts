@@ -187,7 +187,10 @@ Meteor.methods({
       comments
     }
   },
-
+  'dangerous.resetTopicHandled':async function(){
+    const n =await GalleryTopicApi.resetAllTopicHandled();
+    return `reset ${n} topics`;
+  },
   'doExport'() {
     const ll = [
       '205034565',

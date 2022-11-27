@@ -125,7 +125,7 @@ async function addTopic(data: any) {
 
 }
 
-async function refreshTopicUpdate(data: any) {
+async function setHandledTopicUpdate(data: any) {
   const {id,timeStr,minTime,total,updatedAt,msg} = data;
 
   const toUpdate = {
@@ -133,8 +133,18 @@ async function refreshTopicUpdate(data: any) {
     updatedAt: new Date().getTime(),
     pick:PickState.handled
   }
-  const c =await GalleryTopicCollection.update({_id:id},{$set:toUpdate});
-  console.log(`${id} - ${c}`);
+  const tt = {
+    id,
+    toUpdate
+  }
+  console.log(JSON.stringify(tt,null,2));
+  try{
+    const c =await GalleryTopicCollection.update({_id:id},{$set:toUpdate});
+    console.log(`${id} - ${c}`);
+  }catch (e){
+    console.error(e);
+  }
+
 }
 
 async function summary() {
@@ -197,7 +207,7 @@ export const GalleryTopicApi = {
   markAsPick,
   markAsHandled,
   pickOneTopicToProcess,
-  refreshTopicUpdate,
+  setHandledTopicUpdate,
   summary,
   getAllTopicsToMigrate,
   clearPick,

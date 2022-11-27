@@ -28,7 +28,14 @@ function saveContentToFile(content,fileName){
 // @ts-ignore
 app.post("/submitCloseTopicWorks",async (req,res)=>{
   const data = req.body;
-  await GalleryTopicApi.refreshTopicUpdate(data);
+  try{
+    await GalleryTopicApi.setHandledTopicUpdate(data);
+    console.log("submitCloseTopicWorks");
+  }catch (e){
+    console.log(e);
+  }
+  res.send("done");
+
 });
 
 app.post("/submitGalleryTopicWorks",async (req,res)=>{

@@ -48,7 +48,9 @@ async function getOneUnhandled(){
 }
 
 async function clearPick() {
-  await GalleryTopicCollection.update({pick:"pick"},{$set:{pick:"handled"}},{multi:true});
+  await GalleryTopicCollection.update({pick:"pick"},{$set:{pick:"unhandle"}},{multi:true});
+  await GalleryTopicCollection.update({pick:'handled',updatedAt:0},{$set:{pick:"unhandle"}},{multi:true});
+
 }
 async function markAsPick(_id:string){
   await GalleryTopicCollection.update({_id},{$set:{pick:"pick"}});

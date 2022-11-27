@@ -244,7 +244,10 @@ async function pickOneStatusToProcess(param){
 
 
 async function clearPick() {
-  await GalleryTopicStatusCollection.update({pick:"pick"},{$set:{pick:"handled"}},{multi:true});
+  await GalleryTopicStatusCollection.update({pick:"pick"},{$set:{pick:"unhandle"}},{multi:true});
+
+  await GalleryTopicStatusCollection.update({pick:"handled",updated:0},{$set:{pick:"unhandle"}},{multi:true});
+
 }
 
 

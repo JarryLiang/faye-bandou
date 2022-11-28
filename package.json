@@ -5,7 +5,8 @@
     "start": "cross-env TOOL_NODE_FLAGS=\"--max-old-space-size=4096\"   MONGO_URL=mongodb://localhost:27017/douban meteor run -p 8080",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "visualize": "meteor --production --extra-packages bundle-visualizer",
+    "visualize2": "meteor --production --extra-packages bundle-visualizer"
   },
   "devDependencies": {
     "@babel/runtime": "^7.17.9",

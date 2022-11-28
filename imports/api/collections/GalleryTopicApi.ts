@@ -22,7 +22,7 @@ async function resetAllTopicHandled() {
     }},{multi:true});
 }
 
-async function getOneUnhandledPriori(n){
+async function getOneUnhandledPriori(){
   const baseOpt = {
                     $and:[
                       {updatedAt:0},
@@ -37,7 +37,7 @@ async function getOneUnhandledPriori(n){
 async function getOneUnhandled(){
 
   //don't care priori.
-  const r2 = await getOneUnhandledPriori(2)
+  const r2 = await getOneUnhandledPriori()
   if(r2){
     return r2;
   }
@@ -124,7 +124,9 @@ async function addTopic(data: any) {
   return 1;
 
 }
-
+/*
+* mark close with now.
+* */
 async function setHandledTopicUpdate(data: any) {
   const {id,timeStr,minTime,total,updatedAt,msg} = data;
 

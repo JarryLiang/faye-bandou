@@ -25,14 +25,6 @@ async function pickOneStatusByOptAndCount(opt,count){
 
 }
 
-async function pickOneStatusByOpt(opt){
-
-  const s0 = await pickOneStatusByOptAndCount(opt,0);
-  if(s0){
-    return s0;
-  }
-  return undefined;
-}
 
 
 async function pickOneStatusToProcessMin(param,min){
@@ -45,7 +37,7 @@ async function pickOneStatusToProcessMin(param,min){
   const sel ={
     "$and": [
       {
-        "updated": 0
+        "comments_updated": {$lt:1}
       },
       {
         "timestamp": {
@@ -349,6 +341,7 @@ async function updateGalleryTopicItem(parent,item){
         comments_count,
         updated:(new Date()).getTime()
       }
+      //==>the field "updated" will be update now , so pick unhandled status must use comments_updated
       await GalleryTopicStatusCollection.update({_id:id},{$set:toUpdate});
     }
     return;
@@ -383,12 +376,14 @@ async function updateFetchTopicItems(data:any){
 async function refreshStatusComments(data: any) {
   const {statusId,limited,comments,msg,updated} = data;
 
-  let fetched_comments_count =0;
+  let fetched_comments_count =-1;
   let comments_updated =0 ;
+
   if(comments){
     fetched_comments_count = comments.length;
     comments_updated= new Date().getTime();
   }
+
   const toUpdate = {
     pick:PickState.handled,
     limited,
@@ -399,11 +394,12 @@ async function refreshStatusComments(data: any) {
   };
   await GalleryTopicStatusCollection.update({_id:statusId},{$set:toUpdate});
 }
+
 async function summary() {
 
   const total= await GalleryTopicStatusCollection.find({}).count();
   const withComment= await GalleryTopicStatusCollection.find({ comments_count:{$gt:0}}).count();
-  const updated= await GalleryTopicStatusCollection.find({ comments_count:{$gt:0},updated:{$gt:0}}).count();
+  const updated= await GalleryTopicStatusCollection.find({ comments_updated:{$gt:0}}).count();
 
   return {
     total,

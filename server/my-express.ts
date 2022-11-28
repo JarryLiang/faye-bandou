@@ -29,6 +29,7 @@ function saveContentToFile(content,fileName){
 app.post("/submitCloseTopicWorks",async (req,res)=>{
   const data = req.body;
   try{
+
     await GalleryTopicApi.setHandledTopicUpdate(data);
     console.log("submitCloseTopicWorks");
   }catch (e){
@@ -56,7 +57,7 @@ app.post("/submitGalleryTopicWorks",async (req,res)=>{
 });
 
 // @ts-ignore
-app.post('/galleryTopicWorks', (req, res) => {
+app.post("/galleryTopicWorks", (req, res) => {
 
   const t1 = getCurrentTimeStamp();
   LockCenter.getGalleryTopicWorks((err,result)=>{

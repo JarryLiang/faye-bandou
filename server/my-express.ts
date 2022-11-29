@@ -26,6 +26,16 @@ function saveContentToFile(content,fileName){
 }
 
 // @ts-ignore
+app.post("/submitForceSetTopicAsHandled",async (req,res) =>{
+  const data = req.body;
+  const {topicId} = data;
+
+  await GalleryTopicApi.setTopicAsHandled(topicId);
+
+  res.send("done");
+
+});
+// @ts-ignore
 app.post("/submitCloseTopicWorks",async (req,res)=>{
   const data = req.body;
   try{
@@ -36,7 +46,6 @@ app.post("/submitCloseTopicWorks",async (req,res)=>{
     console.log(e);
   }
   res.send("done");
-
 });
 
 app.post("/submitGalleryTopicWorks",async (req,res)=>{

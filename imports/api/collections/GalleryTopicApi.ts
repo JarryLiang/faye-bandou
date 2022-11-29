@@ -124,6 +124,11 @@ async function addTopic(data: any) {
   return 1;
 
 }
+
+async function setTopicAsHandled(topicId: string) {
+  const c =await GalleryTopicCollection.update({_id:topicId},{$set:{pick:PickState.handled}});
+  return c;
+}
 /*
 * mark close with now.
 * */
@@ -214,5 +219,6 @@ export const GalleryTopicApi = {
   getAllTopicsToMigrate,
   clearPick,
   resetAllTopicHandled,
-  getPickedTopics
+  getPickedTopics,
+  setTopicAsHandled
 }

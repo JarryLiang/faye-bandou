@@ -16,7 +16,7 @@ tar -cvzf com.tgz  douban
 
 restore
 
-mongorestore mongodb://127.0.0.1:27017/douban2   douban
+mongorestore mongodb://127.0.0.1:27017/douban3   douban
 
 
 

@@ -127,6 +127,11 @@ function GalleryTopicSelector(props: IProps) {
         width: 20,
         key: 'exclude',
         align: 'center',
+        sorter:(a,b)=>{
+          const av = a.exclude?1:0;
+          const bv = b.exclude?1:0;
+          return av-bv;
+        },
         render: (value, record) => {
           return (<Checkbox checked={value}
                             onChange={(e) => {
@@ -140,7 +145,7 @@ function GalleryTopicSelector(props: IProps) {
         width: 100,
         key: 'priori',
         sorter: (a, b) => {
-          return a.follow - b.follow;
+          return (a.priori||0) - (b.priori||0);
         },
         render: (value, record) => {
           if (value != 0) {

@@ -36,7 +36,7 @@ function MonitorAWSPage(props:IProps) {
   const [addresses,setAddresses ] = useState([]);
   const [status,setStatus ] = useState([]]);
 
-  const toSKIP ="ec2-3-1-209-170.ap-southeast-1.compute.amazonaws.com";
+  const toSKIP ="ec2-13-214-191-19.ap-southeast-1.compute.amazonaws.com";
   useEffect(()=>{
     const lines =text.split("\n");
     const ll:string[] = [];

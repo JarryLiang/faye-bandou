@@ -38,9 +38,14 @@ async function fetchEC2Status(){
     return doFetchStatus(address);
   });
 
-  const values= await Promise.all(ps);
-  lastResult = values;
-  return lastResult;
+  const values= [];
+  for await (const p of ps){
+      const v = await p;
+      console.log(v);
+      values.push(v)
+  }
+
+  return values;
 
 }
 

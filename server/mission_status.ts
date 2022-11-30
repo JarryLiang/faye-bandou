@@ -47,6 +47,7 @@ function logSubmitComments(req,data: any) {
   const from =req.socket.remoteAddress;
 
   const {
+    ip,
     statusId,
     limited,
     comments,
@@ -56,13 +57,15 @@ function logSubmitComments(req,data: any) {
 
   const ds=new Date(updated).toISOString();
 
+  let log = null;
   if(comments){
-    const log=`${ds}/${from} Status: ${statusId} comments:${comments.length} limitd:${limited}`;
-    appendCommentsLog(log);
+    log=`${ds}/${from} [${ip}] Status: ${statusId} comments:${comments.length} limitd:${limited}`;
   }else {
-    const log=`${ds}/${from} Status: ${statusId} ${msg} `;
-    appendCommentsLog(log);
+    log=`${ds}/${from} [${ip}] Status: ${statusId} ${msg} `;
   }
+  appendCommentsLog(log);
+  console.log(log);
+
 }
 
 export const MissionStatus = {

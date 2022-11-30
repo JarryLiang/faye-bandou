@@ -97,18 +97,11 @@ app.post("/galleryTopicWorks", (req, res) => {
 app.post("/submitStatusComments",async (req:any,res:any)=>{
   const data = req.body;
 
-
-   //const {statusId} = data;
-   //const fn= `d:\\temp\\status_${statusId}.json`;
-   //saveContentToFile(data,fn);
-
-
   await GalleryTopicStatusApi.refreshStatusComments(data);
   if(data.comments){
     await GalleryCommentsApi.upsertComments(data.comments);
   }
   MissionStatus.logSubmitComments(req,data);
-
 
   const result ={
     status:"success"

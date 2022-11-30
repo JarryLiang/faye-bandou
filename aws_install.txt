@@ -18,3 +18,5 @@ mongod --version
 sudo systemctl status mongod
 
 sudo systemctl start mongod
+
+pm2 --name faye  start yarn  -- start
